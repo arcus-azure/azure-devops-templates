@@ -1,0 +1,19 @@
+parameters:
+  packagesToPush: 'src/**/*.nupkg'
+
+steps:
+- bash: |
+    if [ -z "$PACKAGES_TO_PUSH" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"packagesToPush\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
+  env:
+    PACKAGES_TO_PUSH: ${{ parameters.packagesToPush }}
+  displayName: Check for required parameters in YAML template
+- task: NuGetCommand@2
+  displayName: 'Push to MyGet.org'
+  inputs:
+    command: push
+    packagesToPush: '${{ parameters.packagesToPush }}'
+    nuGetFeedType: external
+    publishFeedCredentials: 'MyGet.org (Push)'
