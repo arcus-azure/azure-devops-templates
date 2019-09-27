@@ -1,2 +1,2 @@
-# azure-devops-templates
-Collection of Azure DevOps YAML Templates
+# Azure DevOps YAML Templates
+Collection of Azure DevOps YAML Templates used to build & ship Arcus.
