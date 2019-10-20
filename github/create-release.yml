@@ -1,0 +1,40 @@
+parameters:
+  repositoryName: ''
+  tag: ''
+  releaseTitle: ''
+  releaseNotes: ''
+
+steps:
+- bash: |
+    if [ -z "$REPO_NAME" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"repositoryName\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
+    if [ -z "$TAG" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"tag\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
+    if [ -z "$RELEASE_TITLE" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"releaseTitle\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
+    if [ -z "$RELEASE_NOTES" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"releaseNotes\""
+      echo "##vso[task.complete result=Failed;]"
+    fi  
+  env:
+    REPO_NAME: ${{ parameters.repositoryName }}
+    TAG: ${{ parameters.tag }}
+    RELEASE_TITLE: ${{ parameters.releaseTitle }}
+    RELEASE_NOTES: ${{ parameters.releaseNotes }}
+  displayName: Check for required parameters in YAML template
+- task: GitHubRelease@0
+  displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
+  inputs:
+    gitHubConnection: 'GitHub (arcus-automation - OAuth)'
+    repositoryName: '${{ parameters.repositoryName }}'
+    tagSource: manual
+    tag: '${{ parameters.tag }}'
+    title: '${{ parameters.releaseTitle }}'
+    releaseNotesSource: input
+    releaseNotes: '${{ parameters.releaseNotes }}'
