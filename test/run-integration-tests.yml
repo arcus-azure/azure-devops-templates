@@ -1,6 +1,7 @@
 parameters:
   dotnetSdkVersion: ''
   projectName: 'src/*.sln'
+  category: ''
 
 steps:
 - bash: |
@@ -16,6 +17,12 @@ steps:
     DOTNET_SDK_VERSION: ${{ parameters.dotnetSdkVersion }}
     PROJECTS: ${{ parameters.projectName }}
   displayName: Check for required parameters in YAML template
+- powershell: /
+    $categoryCommand = '';
+    if ('${{ parameters.category }}' -ne '') {
+      $categoryCommand = '--filter Category=${{ parameters.category }}';
+    }
+  displayName: 'Determine filter category command'
 - task: DotNetCoreInstaller@0
   displayName: 'Import .NET Core SDK (${{ parameters.dotnetSdkVersion }})'
   inputs:
@@ -37,6 +44,6 @@ steps:
   inputs:
     command: test
     projects: 'src/**/${{ parameters.projectName }}.csproj'
-    arguments: '--configuration $(Build.Configuration)'
+    arguments: '--configuration $(Build.Configuration) $(categoryCommand)'
     nobuild: true
     publishTestResults: true
