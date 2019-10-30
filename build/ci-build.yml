@@ -30,6 +30,7 @@ variables:
     value: 'Arcus.DevOps.Templates'
   - name: 'Arcus_DevOps_Templates_TestValue'
     value: 'Replace token with me!'
+  # 'Package.Version' is added as queue-time variable on build in Azure DevOps
   # 'Package.Version.ManualTrigger' is added as queue-time variable on build in Azure DevOps
 
 stages:
@@ -46,6 +47,7 @@ stages:
             parameters:
               dotnetSdkVersion: '$(DotNet.Sdk.Version)'
               versionSuffix: '$(packageVersion)'
+              version: '$(Package.Version)'
           - task: CopyFiles@2
             displayName: 'Copy build artifacts'
             inputs:
