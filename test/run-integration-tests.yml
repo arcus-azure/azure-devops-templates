@@ -17,7 +17,7 @@ steps:
     DOTNET_SDK_VERSION: ${{ parameters.dotnetSdkVersion }}
     PROJECTS: ${{ parameters.projectName }}
   displayName: Check for required parameters in YAML template
-- powershell: /
+- powershell: |
     $categoryCommand = '';
     if ('${{ parameters.category }}' -ne '') {
       $categoryCommand = '--filter Category=${{ parameters.category }}';
