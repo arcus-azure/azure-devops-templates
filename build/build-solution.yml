@@ -14,24 +14,36 @@ steps:
       echo "##vso[task.logissue type=error;]Missing template parameter \"versionSuffix\""
       echo "##vso[task.complete result=Failed;]"
     fi
+    if [ -z "$VERSION" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"version\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
     if [ -z "$PROJECTS" ]; then
       echo "##vso[task.logissue type=error;]Missing template parameter \"projects\""
       echo "##vso[task.complete result=Failed;]"
     fi
+
+    if [ $VERSION_SUFFIX == '' ]; then
+      $VERSION_SUFFIX_COMMAND = ''
+      echo "##vso[task.setvariable variable=versionSuffixCommand]$VERSION_SUFFIX_COMMAND"
+    else
+      $VERSION_SUFFIX_COMMAND = '--version-suffix $VERSION_SUFFIX'
+      echo "##vso[task.setvariable variable=versionSuffixCommand]$VERSION_SUFFIX_COMMAND"
+    fi
+    
+    if [ $VERSION == '' ]; then
+      $VERSION_COMMAND = ''
+      echo "##vso[task.setvariable variable=versionCommand]$VERSION_COMMAND"
+    else
+      $VERSION_COMMAND = '/property:Version=$VERSION'
+      echo "##vso[task.setvariable variable=versionCommand]$VERSION_COMMAND"
+    fi
   env:
     DOTNET_SDK_VERSION: ${{ parameters.dotnetSdkVersion }}
     VERSION_SUFFIX: ${{ parameters.versionSuffix }}
+    VERSION: ${{ parameters.version }}
     PROJECTS: ${{ parameters.projects }}
   displayName: Check for required parameters in YAML template
-- powershell: |
-    $versionCommand = '';
-    if ('${{ parameters.version }}' -ne '') {
-      $versionCommand = '/property:Version=${{ parameters.version }}';
-    }
-    $versionSuffixCommand = '';
-    if ('${{ parameters.versionSuffix }}' -ne '') {
-      $versionSuffixCommand = '--version-suffix ${{ parameters.versionSuffix }}'
-    }
 - task: DotNetCoreInstaller@0
   displayName: 'Import .NET Core SDK (${{ parameters.dotnetSdkVersion }})'
   inputs:
