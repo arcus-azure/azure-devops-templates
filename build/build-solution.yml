@@ -3,6 +3,8 @@ parameters:
   versionSuffix: ''
   version: ''
   projects: 'src/*.sln'
+  versionCommand: ''
+  versionSuffixCommand: ''
 
 steps:
 - bash: |
