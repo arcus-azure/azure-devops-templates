@@ -1,7 +1,6 @@
 parameters:
   dotnetSdkVersion: ''
   versionSuffix: ''
-  version: ''
   projects: 'src/*.sln'
 
 steps:
@@ -23,15 +22,6 @@ steps:
     VERSION_SUFFIX: ${{ parameters.versionSuffix }}
     PROJECTS: ${{ parameters.projects }}
   displayName: Check for required parameters in YAML template
-- powershell: |
-    $versionCommand = '';
-    if ('${{ parameters.version }}' -ne '') {
-      $versionCommand = '/property:Version=${{ parameters.version }}';
-    }
-    $versionSuffixCommand = '';
-    if ('${{ parameters.versionSuffix }}' -ne '') {
-      $versionSuffixCommand = '--version-suffix ${{ parameters.versionSuffix }}'
-    }
 - task: DotNetCoreInstaller@0
   displayName: 'Import .NET Core SDK (${{ parameters.dotnetSdkVersion }})'
   inputs:
@@ -40,4 +30,4 @@ steps:
   displayName: 'Compile'
   inputs:
     projects: '${{ parameters.projects }}'
-    arguments: '--configuration $(Build.Configuration) $(versionCommand) $(versionSuffixCommand)'
+    arguments: '--configuration $(Build.Configuration) --version-suffix ${{ parameters.versionSuffix }}'
