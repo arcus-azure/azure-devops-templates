@@ -2,6 +2,8 @@ parameters:
   dotnetSdkVersion: ''
   versionSuffix: ''
   projects: 'src/*.sln'
+  versionCommand: ''
+  versionSuffixCommand: ''
 
 steps:
 - bash: |
@@ -13,6 +15,10 @@ steps:
       echo "##vso[task.logissue type=error;]Missing template parameter \"versionSuffix\""
       echo "##vso[task.complete result=Failed;]"
     fi
+    if [ -z "$VERSION" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"version\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
     if [ -z "$PROJECTS" ]; then
       echo "##vso[task.logissue type=error;]Missing template parameter \"projects\""
       echo "##vso[task.complete result=Failed;]"
@@ -20,8 +26,25 @@ steps:
   env:
     DOTNET_SDK_VERSION: ${{ parameters.dotnetSdkVersion }}
     VERSION_SUFFIX: ${{ parameters.versionSuffix }}
+    VERSION: ${{ parameters.version }}
     PROJECTS: ${{ parameters.projects }}
   displayName: Check for required parameters in YAML template
+- powershell: |	
+    $versionCommand = '';	
+    if ('${{ parameters.version }}' -ne '') {	
+      $versionCommand = '/property:Version=${{ parameters.version }}';	
+    }	
+    $versionSuffixCommand = '';	
+    if ('${{ parameters.versionSuffix }}' -ne '') {	
+      $versionSuffixCommand = '--version-suffix ${{ parameters.versionSuffix }}'	
+    }
+
+    Write-Host "Version command = $versionCommand"
+    Write-Host "##vso[task.setvariable variable=versionCommand]$versionCommand"
+
+    Write-Host "Version suffix command = $versionSuffixCommand"
+    Write-Host "##vso[task.setvariable variable=versionSuffixCommand]$versionSuffixCommand"
+  displayName: 'Determine version/version-suffix commands'
 - task: DotNetCoreInstaller@0
   displayName: 'Import .NET Core SDK (${{ parameters.dotnetSdkVersion }})'
   inputs:
