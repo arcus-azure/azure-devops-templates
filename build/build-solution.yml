@@ -1,7 +1,6 @@
 parameters:
   dotnetSdkVersion: ''
   versionSuffix: ''
-  version: ''
   projects: 'src/*.sln'
   versionCommand: ''
   versionSuffixCommand: ''
@@ -54,4 +53,4 @@ steps:
   displayName: 'Compile'
   inputs:
     projects: '${{ parameters.projects }}'
-    arguments: '--configuration $(Build.Configuration) $(versionCommand) $(versionSuffixCommand)'
+    arguments: '--configuration $(Build.Configuration) --version-suffix ${{ parameters.versionSuffix }}'
