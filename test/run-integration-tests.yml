@@ -21,7 +21,10 @@ steps:
     $categoryCommand = '';
     if ('${{ parameters.category }}' -ne '') {
       $categoryCommand = '--filter Category=${{ parameters.category }}';
+      Write-Host "Category command = $categoryCommand"
     }
+
+    Write-Host "##vso[task.setvariable variable=categoryCommand]$categoryCommand"
   displayName: 'Determine filter category command'
 - task: DotNetCoreInstaller@0
   displayName: 'Import .NET Core SDK (${{ parameters.dotnetSdkVersion }})'
