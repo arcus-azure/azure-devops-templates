@@ -5,12 +5,6 @@ trigger:
     include:
       - master
 
-pr:
-  paths:
-    include:
-      - src/*
-      - build/ci-build.yml
-
 resources:
   repositories:
     - repository: templates
