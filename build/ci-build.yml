@@ -37,6 +37,7 @@ stages:
             parameters:
               dotnetSdkVersion: '$(DotNet.Sdk.Version)'
               versionSuffix: '$(packageVersion)'
+              version: '1.2.3'
           - task: CopyFiles@2
             displayName: 'Copy build artifacts'
             inputs:
