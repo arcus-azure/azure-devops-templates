@@ -1,9 +1,8 @@
 parameters:
   dotnetSdkVersion: ''
   versionSuffix: ''
+  version: ''
   projects: 'src/*.sln'
-  versionCommand: ''
-  versionSuffixCommand: ''
 
 steps:
 - bash: |
@@ -11,12 +10,8 @@ steps:
       echo "##vso[task.logissue type=error;]Missing template parameter \"dotnetSdkVersion\""
       echo "##vso[task.complete result=Failed;]"
     fi
-    if [ -z "$VERSION_SUFFIX" ]; then
-      echo "##vso[task.logissue type=error;]Missing template parameter \"versionSuffix\""
-      echo "##vso[task.complete result=Failed;]"
-    fi
-    if [ -z "$VERSION" ]; then
-      echo "##vso[task.logissue type=error;]Missing template parameter \"version\""
+    if [ -z "$VERSION_SUFFIX" ] && [ -z "$VERSION" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"versionSuffix\" or \"version\""
       echo "##vso[task.complete result=Failed;]"
     fi
     if [ -z "$PROJECTS" ]; then
@@ -32,17 +27,16 @@ steps:
 - powershell: |	
     $versionCommand = '';	
     if ('${{ parameters.version }}' -ne '') {	
-      $versionCommand = '/property:Version=${{ parameters.version }}';	
+      $versionCommand = '/property:Version=${{ parameters.version }}';
+      Write-Host "Version command = $versionCommand"
     }	
     $versionSuffixCommand = '';	
     if ('${{ parameters.versionSuffix }}' -ne '') {	
       $versionSuffixCommand = '--version-suffix ${{ parameters.versionSuffix }}'	
+      Write-Host "Version suffix command = $versionSuffixCommand"
     }
 
-    Write-Host "Version command = $versionCommand"
     Write-Host "##vso[task.setvariable variable=versionCommand]$versionCommand"
-
-    Write-Host "Version suffix command = $versionSuffixCommand"
     Write-Host "##vso[task.setvariable variable=versionSuffixCommand]$versionSuffixCommand"
   displayName: 'Determine version/version-suffix commands'
 - task: DotNetCoreInstaller@0
@@ -53,4 +47,4 @@ steps:
   displayName: 'Compile'
   inputs:
     projects: '${{ parameters.projects }}'
-    arguments: '--configuration $(Build.Configuration) --version-suffix ${{ parameters.versionSuffix }}'
+    arguments: '--configuration $(Build.Configuration) $(versionSuffixCommand) $(versionCommand)'
