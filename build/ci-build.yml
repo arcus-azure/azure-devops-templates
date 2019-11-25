@@ -26,7 +26,7 @@ stages:
           - template: ./../../nuget/determine-pr-version.yml
             parameters:
               manualTriggerVersion: $(Package.Version.ManualTrigger)
-          - template: ./../build/build-solution.yml
+          - template: ./../../build/build-solution.yml
             parameters:
               dotnetSdkVersion: '$(DotNet.Sdk.Version)'
               versionSuffix: '-preview-1'
