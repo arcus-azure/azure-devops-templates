@@ -3,8 +3,6 @@ parameters:
   versionSuffix: ''
   version: ''
   projects: 'src/*.sln'
-  versionCommand: ''
-  versionSuffixCommand: ''
 
 steps:
 - bash: |
@@ -29,17 +27,16 @@ steps:
 - powershell: |	
     $versionCommand = '';	
     if ('${{ parameters.version }}' -ne '') {	
-      $versionCommand = '/property:Version=${{ parameters.version }}';	
+      $versionCommand = '/property:Version=${{ parameters.version }}';
+      Write-Host "Version command = $versionCommand"
     }	
     $versionSuffixCommand = '';	
     if ('${{ parameters.versionSuffix }}' -ne '') {	
       $versionSuffixCommand = '--version-suffix ${{ parameters.versionSuffix }}'	
+      Write-Host "Version suffix command = $versionSuffixCommand"
     }
 
-    Write-Host "Version command = $versionCommand"
     Write-Host "##vso[task.setvariable variable=versionCommand]$versionCommand"
-
-    Write-Host "Version suffix command = $versionSuffixCommand"
     Write-Host "##vso[task.setvariable variable=versionSuffixCommand]$versionSuffixCommand"
   displayName: 'Determine version/version-suffix commands'
 - task: DotNetCoreInstaller@0
