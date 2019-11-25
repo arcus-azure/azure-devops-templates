@@ -12,12 +12,8 @@ steps:
       echo "##vso[task.logissue type=error;]Missing template parameter \"dotnetSdkVersion\""
       echo "##vso[task.complete result=Failed;]"
     fi
-    if [ -z "$VERSION_SUFFIX" ]; then
-      echo "##vso[task.logissue type=error;]Missing template parameter \"versionSuffix\""
-      echo "##vso[task.complete result=Failed;]"
-    fi
-    if [ -z "$VERSION" ]; then
-      echo "##vso[task.logissue type=error;]Missing template parameter \"version\""
+    if [ -z "$VERSION_SUFFIX" ] && [ -z "$VERSION" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"versionSuffix\" or \"version\""
       echo "##vso[task.complete result=Failed;]"
     fi
     if [ -z "$PROJECTS" ]; then
