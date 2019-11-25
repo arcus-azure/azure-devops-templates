@@ -29,7 +29,7 @@ steps:
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
 - task: GitHubRelease@0
-  displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
+  displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
   inputs:
     gitHubConnection: 'GitHub (arcus-automation - OAuth)'
     repositoryName: '${{ parameters.repositoryName }}'

@@ -4,15 +4,6 @@ trigger:
   branches:
     include:
       - master
-  paths:
-    include:
-      - src/*
-
-pr:
-  paths:
-    include:
-      - src/*
-      - build/ci-build.yml
 
 resources:
   repositories:
@@ -45,7 +36,7 @@ stages:
           - template: 'build/build-solution.yml@templates'
             parameters:
               dotnetSdkVersion: '$(DotNet.Sdk.Version)'
-              versionSuffix: '$(packageVersion)'
+              versionSuffix: '-preview-1'
               version: '1.2.3'
           - task: CopyFiles@2
             displayName: 'Copy build artifacts'
