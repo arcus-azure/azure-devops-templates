@@ -23,7 +23,7 @@ stages:
         pool:
           vmImage: 'ubuntu-16.04'
         steps:
-          - template: ./../nuget/determine-pr-version.yml
+          - template: ./../../nuget/determine-pr-version.yml
             parameters:
               manualTriggerVersion: $(Package.Version.ManualTrigger)
           - template: build/build-solution.yml
