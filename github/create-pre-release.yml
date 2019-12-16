@@ -40,3 +40,4 @@ steps:
     releaseNotes: '${{ parameters.releaseNotes }}'
     isPreRelease: true
     compareWith: 'lastRelease'
+  condition: contains('${{ parameters.tag }}'', '-')
