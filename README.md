@@ -1,4 +1,22 @@
 # Azure DevOps YAML Templates
 Collection of Azure DevOps YAML Templates used to build & ship Arcus.
 
-- **Publish Preview NuGet Package** - Allows you to push a preview NuGet package to our internal feed.
+## Build
+
+- [Build Solution](build/build-solution.yml): compiles a solution for either a preview or official version.
+
+## GitHub
+
+- [Create Pre-Release](github/create-pre-release.yml): creates a new GitHub pre-release on a given repository.
+- [Create Release](github/create-release.yml): create a new GitHub official release on a given repository.
+
+## Test
+
+- [Run Unit Tests](test/run-unit-tests.yml): run a set of unit tests; without replacing any application tokens with settings.
+- [Run Integration Tests](test/run-integration-tests.yml): run a set of integration tests within a specified category by replacing required tokens with real application settings.
+
+## NuGet
+
+- [Determine Pull Request Version](nuget/determine-pr-version.yml): determines the package version based on the build number into a YAML variable called `$(packageVersion)`.
+- [Publish Preview NuGet Package](nuget/publish-preview-package.yml): allows you to push a preview NuGet package to our internal feed.
+- [Publish Official NuGet Package](nuget/publish-official-package.yml): allows you to push a new official NuGet package to our external feed.
