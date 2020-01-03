@@ -39,9 +39,10 @@ steps:
     Write-Host "##vso[task.setvariable variable=versionCommand]$versionCommand"
     Write-Host "##vso[task.setvariable variable=versionSuffixCommand]$versionSuffixCommand"
   displayName: 'Determine version/version-suffix commands'
-- task: DotNetCoreInstaller@0
+- task: UseDotNet@2
   displayName: 'Import .NET Core SDK (${{ parameters.dotnetSdkVersion }})'
   inputs:
+    packageType: 'sdk'
     version: '${{ parameters.dotnetSdkVersion }}'
 - task: DotNetCoreCLI@2
   displayName: 'Compile'

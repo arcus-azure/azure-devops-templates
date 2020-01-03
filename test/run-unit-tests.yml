@@ -16,9 +16,10 @@ steps:
     DOTNET_SDK_VERSION: ${{ parameters.dotnetSdkVersion }}
     PROJECTS: ${{ parameters.projectName }}
   displayName: Check for required parameters in YAML template
-- task: DotNetCoreInstaller@0
+- task: UseDotNet@2
   displayName: 'Import .NET Core SDK (${{ parameters.dotnetSdkVersion }})'
   inputs:
+    packageType: 'sdk'
     version: '${{ parameters.dotnetSdkVersion }}'
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests'
