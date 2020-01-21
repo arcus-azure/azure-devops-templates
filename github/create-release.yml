@@ -38,4 +38,4 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-  condition: not(contains('${{ parameters.tag }}'', '-'))
+  condition: not(contains('${{ parameters.tag }}', '-'))
