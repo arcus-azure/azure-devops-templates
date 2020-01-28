@@ -81,8 +81,8 @@ stages:
     dependsOn: IntegrationTests
     condition: succeeded()
     jobs:
-      - job: PushToNuGet
-        displayName: 'Push to NuGet.org'
+      - job: ReleaseToGitHub
+        displayName: 'Release to GitHub'
         pool:
           vmImage: 'ubuntu-16.04'
         steps:
