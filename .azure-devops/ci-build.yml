@@ -15,7 +15,7 @@ variables:
   - name: 'Arcus_DevOps_Templates_TestValue'
     value: 'Replace token with me!'
   - name: 'GitHub.Package.Version'
-    value: '0.$(Build.BuildNumber)'
+    value: '0.0.$(Build.BuildNumber)'
   # 'Package.Version.ManualTrigger' is added as queue-time variable on build in Azure DevOps
 
 stages:
