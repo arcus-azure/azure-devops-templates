@@ -106,7 +106,9 @@ stages:
 
   - stage: ReleaseToGitHub
     displayName: 'Release to GitHub'
-    dependsOn: IntegrationTests
+    dependsOn:
+      - UnitTests
+      - IntegrationTests
     condition: succeeded()
     jobs:
       - job: ReleaseToGitHub
@@ -127,6 +129,6 @@ stages:
                 ```
           - template: ./../../github/create-pre-release.yml
             parameters:
-              repositoryName: 'arcus-azure/arcus.messaging'
+              repositoryName: 'arcus-azure/azure-devops-templates-tests'
               releaseNotes: |
                 Nevermind this pre-release notes.
