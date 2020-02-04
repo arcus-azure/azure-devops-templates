@@ -124,11 +124,15 @@ stages:
           - template: ./../../github/create-release.yml
             parameters:
               repositoryName: 'arcus-azure/azure-devops-templates-tests'
+              tag: '$(GitHub.Package.Version)'
+              releaseTitle: '$(GitHub.Package.Version)'
               releaseNotes: |
                 Nevermind this full-release notes.
                 ```
           - template: ./../../github/create-pre-release.yml
             parameters:
               repositoryName: 'arcus-azure/azure-devops-templates-tests'
+              tag: '$(GitHub.Package.Version)-preview-1'
+              releaseTitle: '$(GitHub.Package.Version)-preview-1'
               releaseNotes: |
                 Nevermind this pre-release notes.
