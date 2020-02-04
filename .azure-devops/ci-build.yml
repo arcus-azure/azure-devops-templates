@@ -15,7 +15,7 @@ variables:
   - name: 'Arcus_DevOps_Templates_TestValue'
     value: 'Replace token with me!'
   - name: 'GitHub.Package.Version'
-    value: '0.0.$(Build.BuildNumber)'
+    value: '0.0.$(System.PullRequest.PullRequestNumber)'
   # 'Package.Version.ManualTrigger' is added as queue-time variable on build in Azure DevOps
 
 stages:
@@ -123,7 +123,7 @@ stages:
               path: '$(Build.SourcesDirectory)'
           - template: ./../../github/create-release.yml
             parameters:
-              repositoryName: 'arcus-azure/azure-devops-templates-tests'
+              repositoryName: 'arcus-azure/azure-devops-templates'
               tag: '$(GitHub.Package.Version)'
               releaseTitle: '$(GitHub.Package.Version)'
               releaseNotes: |
@@ -131,7 +131,7 @@ stages:
                 ```
           - template: ./../../github/create-pre-release.yml
             parameters:
-              repositoryName: 'arcus-azure/azure-devops-templates-tests'
+              repositoryName: 'arcus-azure/azure-devops-templates'
               tag: '$(GitHub.Package.Version)-preview-1'
               releaseTitle: '$(GitHub.Package.Version)-preview-1'
               releaseNotes: |
