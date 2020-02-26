@@ -28,14 +28,20 @@ steps:
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
-- ${{ if not(contains(parameters['tag'], '-')) }}:
-  - task: GitHubRelease@0
-    displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
-    inputs:
-      gitHubConnection: 'GitHub (arcus-automation - OAuth)'
-      repositoryName: '${{ parameters.repositoryName }}'
-      tagSource: manual
-      tag: '${{ parameters.tag }}'
-      title: '${{ parameters.releaseTitle }}'
-      releaseNotesSource: input
-      releaseNotes: '${{ parameters.releaseNotes }}'
+- powershell: |
+    if ('${{ parameters.tag }}' -notcontains '-') {
+      Write-Host "##vso[task.setvariable variable=isRelease]true"
+    } else {
+      Write-Host "##vso[task.setvariable variable=isRelease]false"
+    }
+- task: GitHubRelease@0
+  displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
+  inputs:
+    gitHubConnection: 'GitHub (arcus-automation - OAuth)'
+    repositoryName: '${{ parameters.repositoryName }}'
+    tagSource: manual
+    tag: '${{ parameters.tag }}'
+    title: '${{ parameters.releaseTitle }}'
+    releaseNotesSource: input
+    releaseNotes: '${{ parameters.releaseNotes }}'
+  condition: eq('$(isRelease)', 'true')
