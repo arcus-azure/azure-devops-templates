@@ -47,4 +47,4 @@ steps:
     releaseNotes: '${{ parameters.releaseNotes }}'
     isPreRelease: true
     compareWith: 'lastRelease'
-  condition: eq('$(isPreRelease)', 'true')
+  enabled: eq('$(isPreRelease)', 'true')

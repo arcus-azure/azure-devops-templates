@@ -23,12 +23,11 @@ steps:
       echo "##vso[task.logissue type=error;]Missing template parameter \"releaseNotes\""
       echo "##vso[task.complete result=Failed;]"
     fi
-    case "$TAG" in 
-      *-*)
+    if [[ "$TAG" == *-* ]]; then
+    else 
         echo "Because of $TAG, set 'isRelease' = 'true'"
         echo "##vso[task.setvariable variable=isRelease]true"
-        ;;
-    esac
+    fi
   env:
     REPO_NAME: ${{ parameters.repositoryName }}
     TAG: ${{ parameters.tag }}
@@ -45,4 +44,4 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-  condition: eq('$(isRelease)', 'true')
+  enabled: eq('$(isRelease)', 'true')
