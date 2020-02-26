@@ -5,6 +5,8 @@ parameters:
   releaseNotes: ''
 
 steps:
+- variables:
+  isRelease: false
 - bash: |
     if [ -z "$REPO_NAME" ]; then
       echo "##vso[task.logissue type=error;]Missing template parameter \"repositoryName\""
@@ -22,20 +24,18 @@ steps:
       echo "##vso[task.logissue type=error;]Missing template parameter \"releaseNotes\""
       echo "##vso[task.complete result=Failed;]"
     fi
+    case "$TAG" in 
+      *-*)
+        echo "Because of $TAG, set 'isRelease' = 'true'"
+        echo "##vso[task.setvariable variable=isRelease]true"
+        ;;
+    esac
   env:
     REPO_NAME: ${{ parameters.repositoryName }}
     TAG: ${{ parameters.tag }}
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
-- powershell: |
-    if ('${{ parameters.tag }}' -notcontains '-') {
-      Write-Host "Because of ${{ parameters.tag }}, set 'isRelease' = 'true'"
-      Write-Host "##vso[task.setvariable variable=isRelease]true"
-    } else {
-      Write-Host "Because of ${{ parameters.tag }}, set 'isRelease' = 'false'"
-      Write-Host "##vso[task.setvariable variable=isRelease]false"
-    }
 - task: GitHubRelease@0
   displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
   inputs:
