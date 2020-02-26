@@ -21,7 +21,14 @@ steps:
     if [ -z "$RELEASE_NOTES" ]; then
       echo "##vso[task.logissue type=error;]Missing template parameter \"releaseNotes\""
       echo "##vso[task.complete result=Failed;]"
-    fi  
+    fi
+    if [[ $TAG =~ "-" ]]; then
+      echo "Is pre-release = true"
+      echo "##vso[task.setvariable variable=isPreRelease]true"
+    else
+      echo "Is pre-release = false"
+      echo "##vso[task.setvariable variable=isPreRelease]false"
+    fi
   env:
     REPO_NAME: ${{ parameters.repositoryName }}
     TAG: ${{ parameters.tag }}
@@ -38,4 +45,4 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-  condition: not(contains('${{ parameters.tag }}', '-'))
+  condition: not($(isPreRelease))
