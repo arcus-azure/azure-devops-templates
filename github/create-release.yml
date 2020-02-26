@@ -3,7 +3,6 @@ parameters:
   tag: 'v$(Build.BuildNumber)'
   releaseTitle: 'v$(Build.BuildNumber)'
   releaseNotes: ''
-  isRelease: false
 
 steps:
 - bash: |
@@ -24,6 +23,8 @@ steps:
       echo "##vso[task.complete result=Failed;]"
     fi
     if [[ "$TAG" == *-* ]]; then
+        echo "Because of $TAG, set 'isRelease' = 'false'"
+        echo "##vso[task.setvariable variable=isRelease]false"
     else 
         echo "Because of $TAG, set 'isRelease' = 'true'"
         echo "##vso[task.setvariable variable=isRelease]true"
