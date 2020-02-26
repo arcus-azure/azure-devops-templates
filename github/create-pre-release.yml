@@ -30,8 +30,10 @@ steps:
   displayName: Check for required parameters in YAML template
 - powershell: |
     if ('${{ parameters.tag }}' -contains '-') {
+      Write-Host "Because of ${{ parameters.tag }}, set 'isPreRelease' = 'true'"
       Write-Host "##vso[task.setvariable variable=isPreRelease]true"
     } else {
+      Write-Host "Because of ${{ parameters.tag }}, set 'isPreRelease' = 'false'"
       Write-Host "##vso[task.setvariable variable=isPreRelease]false"
     }
 - task: GitHubRelease@0
