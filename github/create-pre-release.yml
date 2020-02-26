@@ -28,16 +28,16 @@ steps:
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
-- task: GitHubRelease@0
-  displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
-  inputs:
-    gitHubConnection: 'GitHub (arcus-automation - OAuth)'
-    repositoryName: '${{ parameters.repositoryName }}'
-    tagSource: manual
-    tag: '${{ parameters.tag }}'
-    title: '${{ parameters.releaseTitle }}'
-    releaseNotesSource: input
-    releaseNotes: '${{ parameters.releaseNotes }}'
-    isPreRelease: true
-    compareWith: 'lastRelease'
-  condition: contains('${{ parameters.tag }}', '-')
+- ${{ if contains(parameters['tag'], '-') }}:
+  - task: GitHubRelease@0
+    displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
+    inputs:
+      gitHubConnection: 'GitHub (arcus-automation - OAuth)'
+      repositoryName: '${{ parameters.repositoryName }}'
+      tagSource: manual
+      tag: '${{ parameters.tag }}'
+      title: '${{ parameters.releaseTitle }}'
+      releaseNotesSource: input
+      releaseNotes: '${{ parameters.releaseNotes }}'
+      isPreRelease: true
+      compareWith: 'lastRelease'
