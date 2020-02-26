@@ -3,10 +3,7 @@ parameters:
   tag: 'v$(Build.BuildNumber)'
   releaseTitle: 'v$(Build.BuildNumber)'
   releaseNotes: ''
-
-variables:
-  - name: 'isPreRelease'
-    value: false
+  isPreRelease: false
 
 steps:
 - bash: |
