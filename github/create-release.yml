@@ -44,4 +44,4 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-  enabled: eq('$(isRelease)', 'true')
+  enabled: $(isRelease)
