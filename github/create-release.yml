@@ -21,7 +21,7 @@ steps:
     if [ -z "$RELEASE_NOTES" ]; then
       echo "##vso[task.logissue type=error;]Missing template parameter \"releaseNotes\""
       echo "##vso[task.complete result=Failed;]"
-    fi  
+    fi
   env:
     REPO_NAME: ${{ parameters.repositoryName }}
     TAG: ${{ parameters.tag }}
