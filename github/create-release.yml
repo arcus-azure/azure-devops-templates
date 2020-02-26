@@ -4,9 +4,11 @@ parameters:
   releaseTitle: 'v$(Build.BuildNumber)'
   releaseNotes: ''
 
+variables:
+  - name: 'isRelease'
+    value: false
+
 steps:
-- variables:
-  isRelease: false
 - bash: |
     if [ -z "$REPO_NAME" ]; then
       echo "##vso[task.logissue type=error;]Missing template parameter \"repositoryName\""
