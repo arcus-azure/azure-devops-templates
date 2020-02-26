@@ -123,7 +123,7 @@ stages:
               path: '$(Build.SourcesDirectory)'
           - template: ./../../github/create-release.yml
             parameters:
-              repositoryName: 'arcus-azure/azure-devops-templates'
+              repositoryName: 'arcus-azure/azure-devops-templates-tests'
               tag: 'v$(GitHub.Package.Version)'
               releaseTitle: 'v$(GitHub.Package.Version)'
               releaseNotes: |
@@ -131,7 +131,7 @@ stages:
                 ```
           - template: ./../../github/create-pre-release.yml
             parameters:
-              repositoryName: 'arcus-azure/azure-devops-templates'
+              repositoryName: 'arcus-azure/azure-devops-templates-tests'
               tag: 'v$(GitHub.Package.Version)'
               releaseTitle: 'v$(GitHub.Package.Version)'
               releaseNotes: |
