@@ -123,15 +123,15 @@ stages:
           - template: ./../../github/create-release.yml
             parameters:
               repositoryName: 'arcus-azure/azure-devops-templates'
-              tag: '${{ variables.GitHubRelease }}'
-              releaseTitle: '${{ variables.GitHubRelease }}'
+              tag: '$(GitHub.Release)'
+              releaseTitle: '$(GitHub.Release)'
               releaseNotes: |
                 Nevermind this full-release notes.
                 ```
           - template: ./../../github/create-pre-release.yml
             parameters:
               repositoryName: 'arcus-azure/azure-devops-templates'
-              tag: '${{ variables.GitHubRelease }}'
-              releaseTitle: '${{ variables.GitHubRelease }}'
+              tag: '$(GitHub.Release)'
+              releaseTitle: '$(GitHub.Release)'
               releaseNotes: |
                 Nevermind this pre-release notes.
