@@ -16,8 +16,10 @@ variables:
     value: 'Replace token with me!'
   - name: 'GitHub.Package.Version'
     value: '0.0.$(System.PullRequest.PullRequestNumber)-preview'
+  - name: 'patch'
+    value: $[counter(1, 1)]
   - name: 'GitHub.Release'
-    value: 'v$(GitHub.Package.Version)'
+    value: 'v$(GitHub.Package.Version)$(patch)'
   # 'Package.Version.ManualTrigger' is added as queue-time variable on build in Azure DevOps
 
 stages:
