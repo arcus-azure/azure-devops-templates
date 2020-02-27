@@ -27,19 +27,6 @@ steps:
     TAG: ${{ parameters.tag }}
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
-  displayName: Check for required parameters in YAML template
-- powershell: |
-    if ('$Env:TAG' -contains '-') {
-      Write-Host "GitHub release is pre-release because of $Env:TAG"
-      Write-Host "##vso[task.setvariable variable=isPreRelease]true"
-      Write-Host "##vso[task.setvariable variable=compareWith]lastRelease"
-    } else {
-      Write-Host "GitHub release is full-release because of $Env:TAG"
-      Write-Host "##vso[task.setvariable variable=isPreRelease]false"
-      Write-Host "##vso[task.setvariable variable=compareWith]lastFullRelease"
-    }
-  env:
-    TAG: ${{ parameters.tag }}
   displayName: 'Determining sort of GitHub release'
 - task: GitHubRelease@0
   displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
@@ -51,5 +38,6 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-    isPreRelease: $(isPreRelease)
-    compareWith: $(compareWith)
+    isPreRelease: true
+    compareWith: 'lastRelease'
+  condition: contains('${{ parameters.tag }}', '-')

@@ -22,21 +22,27 @@ steps:
       echo "##vso[task.logissue type=error;]Missing template parameter \"releaseNotes\""
       echo "##vso[task.complete result=Failed;]"
     fi
-    if [[ "$TAG" == *-* ]]; then
-        echo "Because of $TAG, set 'isRelease' = 'false'"
-        echo "##vso[task.setvariable variable=isRelease]false"
-    else 
-        echo "Because of $TAG, set 'isRelease' = 'true'"
-        echo "##vso[task.setvariable variable=isRelease]true"
-    fi
   env:
     REPO_NAME: ${{ parameters.repositoryName }}
     TAG: ${{ parameters.tag }}
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
+- powershell: |
+    if ('$Env:TAG' -match '-') {
+      Write-Host "GitHub release is pre-release because of $Env:TAG"
+      Write-Host "##vso[task.setvariable variable=isPreRelease]true"
+      Write-Host "##vso[task.setvariable variable=compareWith]lastRelease"
+    } else {
+      Write-Host "GitHub release is full-release because of $Env:TAG"
+      Write-Host "##vso[task.setvariable variable=isPreRelease]false"
+      Write-Host "##vso[task.setvariable variable=compareWith]lastFullRelease"
+    }
+  env:
+    TAG: ${{ parameters.tag }}
+  displayName: 'Determining sort of GitHub release'
 - task: GitHubRelease@0
-  displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
+  displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
   inputs:
     gitHubConnection: 'GitHub (arcus-automation - OAuth)'
     repositoryName: '${{ parameters.repositoryName }}'
@@ -45,4 +51,5 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-  enabled: false
+    isPreRelease: $(isPreRelease)
+    compareWith: $(compareWith)

@@ -7,7 +7,8 @@ Collection of Azure DevOps YAML Templates used to build & ship Arcus.
 
 ## GitHub
 
-- [Create Pre-Release](github/create-pre-release.yml): creates a new GitHub pre-release on a given repository.
+- ~~[Create Pre-Release](github/create-pre-release.yml): creates a new GitHub pre-release on a given repository.~~
+    > The **Create Release** task is now available to do the pre-release too.
 - [Create Release](github/create-release.yml): create a new GitHub official release on a given repository.
 
 ## Test
