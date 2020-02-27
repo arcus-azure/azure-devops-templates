@@ -45,6 +45,5 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-    isPreRelease: true
+    isPreRelease: ${{ not(contains(parameters['tag'], '-')) }}
     compareWith: 'lastRelease'
-  condition: $(isPreRelease)
