@@ -17,7 +17,7 @@ variables:
   - name: 'GitHub.Package.Version'
     value: '0.0.$(System.PullRequest.PullRequestNumber)-preview'
   - name: 'GitHub.Release'
-    value: 'v$(GitHub.Package.Version)'
+    value: 'v$(GitHub.Package.Version)${{ counter(1, 1) }}'
   # 'Package.Version.ManualTrigger' is added as queue-time variable on build in Azure DevOps
 
 stages:

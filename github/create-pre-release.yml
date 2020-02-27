@@ -36,7 +36,8 @@ steps:
       Write-Host "##vso[task.setvariable variable=isPreRelease]false"
       Write-Host "##vso[task.setvariable variable=compareWith]lastFullRelease"
     }
-  TAG: ${{ parameters.tag }}
+  env:
+    TAG: ${{ parameters.tag }}
   displayName: 'Determining sort of GitHub release'
 - task: GitHubRelease@0
   displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
