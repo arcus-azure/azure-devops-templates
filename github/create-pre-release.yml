@@ -38,10 +38,5 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-    # isPreRelease: ${{ not(contains(parameters['tag'], '-')) }}
-    ${{ if contains(parameters['tag'], '-') }}:
-      compareWith: 'lastRelease'
-      isPreRelease: true
-    ${{ if not(contains(parameters['tag'], '-')) }}:
-      compareWith: 'lastFullRelease'
-      isPreRelease: false
+    isPreRelease: ${{ contains(parameters['tag'], '-') }}
+    compareWith: ${{ contains(parameters['tag'], '-') ? 'lastRelease' : 'lastFullRelease' }}
