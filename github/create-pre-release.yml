@@ -28,6 +28,14 @@ steps:
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
+- powershell: |
+    if ('${{ parameters.tag }}' -contains '-') {
+      Write-Host "##vso[task.setvariable variable=isPreRelease]true"
+      Write-Host "##vso[task.setvariable variable=compareWith]lastRelease"
+    } else {
+      Write-Host "##vso[task.setvariable variable=isPreRelease]false"
+      Write-Host "##vso[task.setvariable variable=compareWith]lastFullRelease"
+    }
 - task: GitHubRelease@0
   displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
   inputs:
@@ -38,5 +46,5 @@ steps:
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
     releaseNotes: '${{ parameters.releaseNotes }}'
-    isPreRelease: ${{ contains(parameters['tag'], '-') }}
-    compareWith: ${{ contains(parameters['tag'], '-') ? 'lastRelease' : 'lastFullRelease' }}
+    isPreRelease: $(isPreRelease)
+    compareWith: $(compareWith)
