@@ -27,7 +27,7 @@ steps:
     TAG: ${{ parameters.tag }}
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
-  displayName: 'Determining sort of GitHub release'
+  displayName: Check for required parameters in YAML template
 - task: GitHubRelease@0
   displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
   inputs:
