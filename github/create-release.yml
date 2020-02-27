@@ -29,7 +29,7 @@ steps:
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
 - powershell: |
-    if ('$Env:TAG' -match '-') {
+    if ($Env:TAG -match '-') {
       Write-Host "GitHub release is pre-release because of $Env:TAG"
       Write-Host "##vso[task.setvariable variable=isPreRelease]true"
       Write-Host "##vso[task.setvariable variable=compareWith]lastRelease"
@@ -42,7 +42,7 @@ steps:
     TAG: ${{ parameters.tag }}
   displayName: 'Determining sort of GitHub release'
 - task: GitHubRelease@0
-  displayName: 'Create GitHub Pre-Release for ${{ parameters.repositoryName }}'
+  displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
   inputs:
     gitHubConnection: 'GitHub (arcus-automation - OAuth)'
     repositoryName: '${{ parameters.repositoryName }}'
