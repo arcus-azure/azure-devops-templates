@@ -19,3 +19,8 @@ Collection of Azure DevOps YAML Templates used to build & ship Arcus.
 - [Determine Pull Request Version](nuget/determine-pr-version.yml): determines the package version based on the build number into a YAML variable called `$(packageVersion)`.
 - [Publish Preview NuGet Package](nuget/publish-preview-package.yml): allows you to push a preview NuGet package to our internal feed.
 - [Publish Official NuGet Package](nuget/publish-official-package.yml): allows you to push a new official NuGet package to our external feed.
+
+
+## PyPi
+
+- [Determine Pull Request Version](pypi/determine-pr-version.yml): determines the package version based on the build number into a YAML variable called `$(packageVersion)`.
