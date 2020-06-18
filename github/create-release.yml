@@ -3,6 +3,7 @@ parameters:
   tag: 'v$(Build.BuildNumber)'
   releaseTitle: 'v$(Build.BuildNumber)'
   releaseNotes: ''
+  serviceConnection: 'GitHub (arcus-automation - OAuth)'
 
 steps:
 - bash: |
@@ -22,11 +23,16 @@ steps:
       echo "##vso[task.logissue type=error;]Missing template parameter \"releaseNotes\""
       echo "##vso[task.complete result=Failed;]"
     fi
+    if [ -z "$SERVICE_CONNECTION" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"serviceConnection\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
   env:
     REPO_NAME: ${{ parameters.repositoryName }}
     TAG: ${{ parameters.tag }}
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
+    SERVICE_CONNECTION: ${{ parameters.serviceConnection }}
   displayName: Check for required parameters in YAML template
 - powershell: |
     if ($Env:TAG -match '-') {
@@ -44,7 +50,7 @@ steps:
 - task: GitHubRelease@0
   displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
   inputs:
-    gitHubConnection: 'GitHub (arcus-automation - OAuth)'
+    gitHubConnection: '${{ parameters.serviceConnection }}'
     repositoryName: '${{ parameters.repositoryName }}'
     tagSource: manual
     tag: '${{ parameters.tag }}'
