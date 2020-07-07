@@ -40,7 +40,9 @@ steps:
       Write-Host "##vso[task.setvariable variable=isPreRelease]false"
       Write-Host "##vso[task.setvariable variable=compareWith]lastFullRelease"
 
-      $releaseNotes = @"$Env:RELEASE_NOTES
+      $releaseNotes = 
+    @"
+    $Env:RELEASE_NOTES
 
     ## What's new?
     ### Features
