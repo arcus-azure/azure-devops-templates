@@ -33,13 +33,36 @@ steps:
       Write-Host "GitHub release is pre-release because of $Env:TAG"
       Write-Host "##vso[task.setvariable variable=isPreRelease]true"
       Write-Host "##vso[task.setvariable variable=compareWith]lastRelease"
+      Write-Host "##vso[task.setvariable variable=releaseNotes]$Env:RELEASE_NOTES"
+      Write-Host "##vso[task.setvariable variable=isDraft]false"
     } else {
       Write-Host "GitHub release is full-release because of $Env:TAG"
       Write-Host "##vso[task.setvariable variable=isPreRelease]false"
       Write-Host "##vso[task.setvariable variable=compareWith]lastFullRelease"
+
+      $releaseNotes = 
+    @"
+    $Env:RELEASE_NOTES
+
+    ## What's new?
+    ### Features
+
+    ### Fixes / Changes
+    None.
+
+    ### Breaking Changes
+    None.
+
+    ### Removal
+    None.
+    "@
+
+      Write-Host "##vso[task.setvariable variable=releaseNotes]$releaseNotes"
+      Write-Host "##vso[task.setvariable variable=isDraft]true"
     }
   env:
     TAG: ${{ parameters.tag }}
+    RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: 'Determining sort of GitHub release'
 - task: GitHubRelease@0
   displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
@@ -50,6 +73,7 @@ steps:
     tag: '${{ parameters.tag }}'
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
-    releaseNotes: '${{ parameters.releaseNotes }}'
+    releaseNotes: '$(releaseNotes)'
     isPreRelease: $(isPreRelease)
+    isDraft: $(isDraft)
     compareWith: $(compareWith)
