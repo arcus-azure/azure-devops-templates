@@ -26,7 +26,7 @@ steps:
     $formats = ${{ parameters.formatByBuildReason }}
     Write-Host $formats
 
-    $packageVersion = 
+    $format = 
       $formats | 
         Where-Object { 
           if ($_.reason -eq $(Build.Reason)) {
@@ -35,8 +35,10 @@ steps:
           } else { return false } } | 
         Select -First 1
 
-    if ($packageVersion -eq '' -or $packageVersion -eq $null) {
+    if ($format.Count -eq 0) {
       $packageVersion = '$(Build.BuildNumber)-${{ parameters.manualTriggerVersion }}'
+    } else {
+      $packageVersion = $format[0]
     }
 
     Write-Host "Package version = $packageVersion"
