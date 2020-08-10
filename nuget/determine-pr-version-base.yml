@@ -23,21 +23,19 @@ steps:
     Write-Host "Package manual trigger version = ${{ parameters.manualTriggerVersion }}"
     Write-Host "Build reason = $(Build.Reason)"
 
-    $formats = ${{ parameters.formatByBuildReason }}
-
     $format = 
-      $formats | 
+      ${{ parameters.formatByBuildReason }} | 
         Where-Object { 
-          if ($_.reason -eq $(Build.Reason)) {
+          if ($_.name -eq $(Build.Reason)) {
             Write-Host "Overriding package version given it's a $(Build.Reason)"
             return true;
           } else { return false } } | 
         Select -First 1
 
-    if ($format.Count -eq 0) {
+    if ($format.length -eq 0) {
       $packageVersion = '$(Build.BuildNumber)-${{ parameters.manualTriggerVersion }}'
     } else {
-      $packageVersion = $format[0]
+      $packageVersion = $format[0].value
     }
 
     Write-Host "Package version = $packageVersion"
