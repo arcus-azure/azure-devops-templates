@@ -23,20 +23,22 @@ steps:
     Write-Host "Package manual trigger version = ${{ parameters.manualTriggerVersion }}"
     Write-Host "Build reason = $(Build.Reason)"
 
-    $format = 
-      ${{ parameters.formatByBuildReason }} | 
-        Where-Object { 
-          if ($_.name -eq $(Build.Reason)) {
-            Write-Host "Overriding package version given it's a $(Build.Reason)"
-            return true;
-          } else { return false } } | 
-        Select -First 1
+    Write-Host "${{ parameters.formatByBuildReason }}"
 
-    if ($format.length -eq 0) {
-      $packageVersion = '$(Build.BuildNumber)-${{ parameters.manualTriggerVersion }}'
-    } else {
-      $packageVersion = $format[0].value
-    }
+    #$format = 
+    #  ${{ parameters.formatByBuildReason }} | 
+    #    Where { 
+    #      if ($_.name -eq $(Build.Reason)) {
+    #        Write-Host "Overriding package version given it's a $(Build.Reason)"
+    #        return true;
+    #      } else { return false } } | 
+    #    Select -index 0
+
+    #if ($format.length -eq 0) {
+    #  $packageVersion = '$(Build.BuildNumber)-${{ parameters.manualTriggerVersion }}'
+    #} else {
+    #  $packageVersion = $format[0].value
+    #}
 
     Write-Host "Package version = $packageVersion"
     Write-Host "##vso[task.setvariable variable=${{ parameters.packageVersionVariableName }}]$packageVersion"
