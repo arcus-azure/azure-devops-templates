@@ -41,15 +41,18 @@ steps:
         $pullRequestNumber= "$(System.PullRequest.PullRequestNumber)"
         Write-Host "PR Number = $pullRequestNumber"
 
-        if ('${{ parameters.pullRequestFormat }}' -eq 'pypi') {
+        if ('${{ parameters.pullRequestFormat }}' -eq 'dev') {
+            Write-Host "Using dev PR format"
             $pullRequestString = '{0:d4}' -f [int]$pullRequestNumber
             $packageVersion = "dev$dateFormat$pullRequestString"
         } else {
+            Write-Host "Using default PR format"
             $pullRequestNumber= "$(System.PullRequest.PullRequestNumber)"
             $packageVersion = "$dateFormat-PR-$pullRequestNumber"
         }
     } elseif ('$(Build.Reason)' -eq 'InvidualCI') { 
-        if ('${{ parameters.invidualCIFormat }}' -eq 'pypi') {
+        if ('${{ parameters.invidualCIFormat }}' -eq 'alpha') {
+            Write-Host "Using alpha CI build format"
             Write-Host "Overriding package version given it's a master build"
             $packageVersion = '$(Build.BuildNumber)';
             $packageVersion = "alpha$packageVersion"
