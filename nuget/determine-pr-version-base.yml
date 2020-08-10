@@ -23,8 +23,6 @@ steps:
     Write-Host "Package manual trigger version = ${{ parameters.manualTriggerVersion }}"
     Write-Host "Build reason = $(Build.Reason)"
 
-    Write-Host "${{ parameters.formatByBuildReason }}"
-
     #$format = 
     #  ${{ parameters.formatByBuildReason }} | 
     #    Where { 
