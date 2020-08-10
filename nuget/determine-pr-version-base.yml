@@ -24,7 +24,6 @@ steps:
     Write-Host "Build reason = $(Build.Reason)"
 
     $formats = ${{ parameters.formatByBuildReason }}
-    Write-Host $formats
 
     $format = 
       $formats | 
