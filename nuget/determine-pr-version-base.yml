@@ -1,7 +1,7 @@
 parameters:
   manualTriggerVersion: ''
   packageVersionVariableName: 'PackageVersion'
-  formatByBuildReason: []
+  formatByBuildReason: {}
 
 steps:
 - bash: |
