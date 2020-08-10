@@ -16,21 +16,10 @@ steps:
     MANUAL_TRIGGER_VERSION: ${{ parameters.manualTriggerVersion }}
     PACKAGE_VERSION_VAR: ${{ parameters.packageVersionVariableName }}
   displayName: Check for required parameters in YAML template
-- powershell: /
-    $pullRequestNumber= "$(System.PullRequest.PullRequestNumber)"
-    $pullRequestString = '{0:d4}' -f [int]$pullRequestNumber
-    Write-Host "PR Number = $pullRequestNumber"
-    
-    $dateFormat = Get-Date -UFormat "%Y%m%d"
-    $pullRequestPackageVersion = "dev$dateFormat$pullRequestString"
-    Write-Host "##vso[task.setvariable=pullRequestPackageVersion]$pullRequestPackageVersion"
-
-    $invidualCIPackageVersion = "alpha$(Build.BuildNumber)"
-    Write-Host "##vso[task.setvariable=invidualCIPackageVersion]$invidualCIPackageVersion"
 - template: determine-pr-version-base.yml
   parameters:
     manualTriggerVersion: ${{ parameters.manualTriggerVersion }}
     packageVersionVariableName: ${{ parameters.packageVersionVariableName }}
-    formatByBuildReason:
-      - PullRequest: $(pullRequestPackageVersion)
-      - IndividualCI: $(invidualCIPackageVersion)
+    pullRequestFormat: dev
+    invidualCIFormat: alpha
+      

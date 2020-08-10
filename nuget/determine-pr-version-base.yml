@@ -1,7 +1,18 @@
 parameters:
   manualTriggerVersion: ''
   packageVersionVariableName: 'PackageVersion'
-  formatByBuildReason: {}
+  pullRequestFormat:
+    type: string
+    default: PR
+    values:
+     - PR
+     - dev
+  invidualCIFormat:
+    type: string
+    default: none
+    values:
+      - none
+      - alpha
 
 steps:
 - bash: |
@@ -18,25 +29,36 @@ steps:
     PACKAGE_VERSION_VAR: ${{ parameters.packageVersionVariableName }}
   displayName: Check for required parameters in YAML template
 - powershell: |
-    $packageVersion = '';
+    $packageVersion = '$(Build.BuildNumber)'
 
     Write-Host "Package manual trigger version = ${{ parameters.manualTriggerVersion }}"
     Write-Host "Build reason = $(Build.Reason)"
 
-    #$format = 
-    #  ${{ parameters.formatByBuildReason }} | 
-    #    Where { 
-    #      if ($_.name -eq $(Build.Reason)) {
-    #        Write-Host "Overriding package version given it's a $(Build.Reason)"
-    #        return true;
-    #      } else { return false } } | 
-    #    Select -index 0
+    if('$(Build.Reason)' -eq 'PullRequest') {
+        Write-Host "Overriding package version given it's a PR build"
+        
+        $dateFormat = Get-Date -UFormat "%Y%m%d"
+        $pullRequestNumber= "$(System.PullRequest.PullRequestNumber)"
+        Write-Host "PR Number = $pullRequestNumber"
 
-    #if ($format.length -eq 0) {
-    #  $packageVersion = '$(Build.BuildNumber)-${{ parameters.manualTriggerVersion }}'
-    #} else {
-    #  $packageVersion = $format[0].value
-    #}
+        if (${{ parameters.pullRequestFormat }} -eq 'pypi') {
+            $pullRequestString = '{0:d4}' -f [int]$pullRequestNumber
+            $packageVersion = "dev$dateFormat$pullRequestString"
+        } else {
+            $pullRequestNumber= "$(System.PullRequest.PullRequestNumber)"
+            $packageVersion = "$dateFormat-PR-$pullRequestNumber"
+        }
+    } elseif ('$(Build.Reason)' -eq 'InvidualCI') { 
+        if (${{ parameters.invidualCIFormat }} -eq 'pypi') {
+            Write-Host "Overriding package version given it's a master build"
+            $packageVersion = '$(Build.BuildNumber)';
+            $packageVersion = "alpha$packageVersion"
+        } else {
+            $packageVersion = "$packageVersion-${{ parameters.manualTriggerVersion }}"
+        }
+    } else {
+        $packageVersion = "$packageVersion-${{ parameters.manualTriggerVersion }}"
+    }
 
     Write-Host "Package version = $packageVersion"
     Write-Host "##vso[task.setvariable variable=${{ parameters.packageVersionVariableName }}]$packageVersion"
