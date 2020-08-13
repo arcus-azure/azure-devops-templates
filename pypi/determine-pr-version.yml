@@ -22,4 +22,3 @@ steps:
     packageVersionVariableName: ${{ parameters.packageVersionVariableName }}
     pullRequestFormat: dev
     invidualCIFormat: alpha
-      
