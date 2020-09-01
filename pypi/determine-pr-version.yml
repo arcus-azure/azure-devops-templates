@@ -3,22 +3,22 @@ parameters:
   packageVersionVariableName: 'PackageVersion'
 
 steps:
-  - bash: |
-      if [ -z "$MANUAL_TRIGGER_VERSION" ]; then
-        echo "##vso[task.logissue type=error;]Missing template parameter \"manualTriggerVersion\""
-        echo "##vso[task.complete result=Failed;]"
-      fi
-      if [ -z "$PACKAGE_VERSION_VAR" ]; then
-        echo "##vso[task.logissue type=error;]Missing template parameter \"packageVersionVariableName\""
-        echo "##vso[task.complete result=Failed;]"
-      fi
-    env:
-      MANUAL_TRIGGER_VERSION: ${{ parameters.manualTriggerVersion }}
-      PACKAGE_VERSION_VAR: ${{ parameters.packageVersionVariableName }}
-    displayName: Check for required parameters in YAML template
-  - template: ../determine-pr-version.yml
-    parameters:
-      manualTriggerVersion: ${{ parameters.manualTriggerVersion }}
-      packageVersionVariableName: ${{ parameters.packageVersionVariableName }}
-      pullRequestFormat: dev
-      invidualCIFormat: alpha
+- bash: |
+    if [ -z "$MANUAL_TRIGGER_VERSION" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"manualTriggerVersion\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
+    if [ -z "$PACKAGE_VERSION_VAR" ]; then
+      echo "##vso[task.logissue type=error;]Missing template parameter \"packageVersionVariableName\""
+      echo "##vso[task.complete result=Failed;]"
+    fi
+  env:
+    MANUAL_TRIGGER_VERSION: ${{ parameters.manualTriggerVersion }}
+    PACKAGE_VERSION_VAR: ${{ parameters.packageVersionVariableName }}
+  displayName: Check for required parameters in YAML template
+- template: ../determine-pr-version.yml
+  parameters:
+    manualTriggerVersion: ${{ parameters.manualTriggerVersion }}
+    packageVersionVariableName: ${{ parameters.packageVersionVariableName }}
+    pullRequestFormat: dev
+    invidualCIFormat: alpha
