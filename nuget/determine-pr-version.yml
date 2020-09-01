@@ -16,7 +16,7 @@ steps:
     MANUAL_TRIGGER_VERSION: ${{ parameters.manualTriggerVersion }}
     PACKAGE_VERSION_VAR: ${{ parameters.packageVersionVariableName }}
   displayName: Check for required parameters in YAML template
-- template: determine-pr-version-base.yml
+- template: ../determine-pr-version.yml
   parameters:
     manualTriggerVersion: ${{ parameters.manualTriggerVersion }}
     packageVersionVariableName: ${{ parameters.packageVersionVariableName }}
