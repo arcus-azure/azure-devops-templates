@@ -56,7 +56,7 @@ steps:
             }
 
             $pullRequestNumber= "$(System.PullRequest.PullRequestNumber)"
-            $patch = "$(Rev:r)"
+            $patch = "$(rev:.r)"
             $packageVersion = "$currentVersion-PR-$pullRequestNumber-$patch"
         }
     } elseif ('$(Build.Reason)' -eq 'InvidualCI') { 
