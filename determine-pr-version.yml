@@ -47,8 +47,17 @@ steps:
             $packageVersion = "dev$dateFormat$pullRequestString"
         } else {
             Write-Host "Using default PR format"
+            $nugetSearchUrl = "https://azuresearch-usnc.nuget.org/query?q=$(Project)&prerelease=false"
+            $response = Invoke-WebRequest $nugetSearchUrl
+            $json = ConvertFrom-Json $response.Content
+            $currentVersion = $json.data[0].version
+            if ($currentVersion -eq $null) {
+              $currentVersion = "0.1.0" 
+            }
+
             $pullRequestNumber= "$(System.PullRequest.PullRequestNumber)"
-            $packageVersion = "$dateFormat-PR-$pullRequestNumber"
+            $patch = "$(Build.BuildNumber)"
+            $packageVersion = "$currentVersion-PR-$pullRequestNumber-$patch"
         }
     } elseif ('$(Build.Reason)' -eq 'InvidualCI') { 
         if ('${{ parameters.invidualCIFormat }}' -eq 'alpha') {
