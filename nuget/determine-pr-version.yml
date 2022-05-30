@@ -22,3 +22,4 @@ steps:
     packageVersionVariableName: ${{ parameters.packageVersionVariableName }}
     pullRequestFormat: PR
     invidualCIFormat: none
+    packageType: 'NuGet'

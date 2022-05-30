@@ -13,6 +13,12 @@ parameters:
     values:
       - none
       - alpha
+  packageType:
+    type: string
+    default: NuGet
+    values:
+      - NuGet
+      - Python
 
 steps:
 - bash: |
@@ -65,6 +71,18 @@ steps:
             Write-Host "Overriding package version given it's a master build"
             $packageVersion = '$(Build.BuildNumber)';
             $packageVersion = "alpha$packageVersion"
+        } elseif ('${{ parameters.packageType }}' -eq 'NuGet') {
+            Write-Host "Using released NuGet version in IndividualCI build"
+            $nugetSearchUrl = "https://azuresearch-usnc.nuget.org/query?q=$(Project)&prerelease=false"
+            $response = Invoke-WebRequest $nugetSearchUrl
+            $json = ConvertFrom-Json $response.Content
+            $currentVersion = $json.data[0].version
+            if ($currentVersion -eq $null) {
+              $currentVersion = "0.1.0" 
+            }
+
+            $patch = "$(Build.BuildNumber)"
+            $packageVersion = "$currentVersion-preview-$patch"
         } else {
             $packageVersion = "$packageVersion-${{ parameters.manualTriggerVersion }}"
         }
