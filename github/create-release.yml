@@ -29,7 +29,7 @@ steps:
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
 - bash: |
-    if [ -z "TAG" ]; then
+    if [[ "$TAG" == *"-"* ]]; then
       echo "GitHub release is pre-release because of $TAG"
       echo "##vso[task.setvariable variable=isPreRelease]true"
       echo "##vso[task.setvariable variable=compareWith]lastRelease"
