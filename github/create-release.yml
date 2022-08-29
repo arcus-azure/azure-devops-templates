@@ -33,33 +33,15 @@ steps:
       echo "GitHub release is pre-release because of $TAG"
       echo "##vso[task.setvariable variable=isPreRelease]true"
       echo "##vso[task.setvariable variable=compareWith]lastRelease"
-      echo "##vso[task.setvariable variable=releaseNotes]$RELEASE_NOTES"
       echo "##vso[task.setvariable variable=isDraft]false"
     else
       echo "GitHub release is full-release because of $TAG"
       echo "##vso[task.setvariable variable=isPreRelease]false"
       echo "##vso[task.setvariable variable=compareWith]lastFullRelease"
-
-      releaseSummary = "
-    ## What's new?
-    ### Features
-
-    ### Fixes / Changes
-    None.
-
-    ### Breaking Changes
-    None.
-
-    ### Removal
-    None.
-    "
-    releaseNotes = "$RELEASE_NOTES$releaseSummary"
-    echo "##vso[task.setvariable variable=releaseNotes]$releaseNotes"
-    echo "##vso[task.setvariable variable=isDraft]true"
+      echo "##vso[task.setvariable variable=isDraft]true"
     fi
   env:
     TAG: ${{ parameters.tag }}
-    RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: 'Determining sort of GitHub release'
 - task: GitHubRelease@0
   displayName: 'Create GitHub Release for ${{ parameters.repositoryName }}'
@@ -70,7 +52,7 @@ steps:
     tag: '${{ parameters.tag }}'
     title: '${{ parameters.releaseTitle }}'
     releaseNotesSource: input
-    releaseNotes: '$(releaseNotes)'
+    releaseNotes: '${{ parameters.releaseNotes }}'
     isPreRelease: $(isPreRelease)
     isDraft: $(isDraft)
     compareWith: $(compareWith)
