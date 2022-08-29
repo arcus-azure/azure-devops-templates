@@ -28,21 +28,19 @@ steps:
     RELEASE_TITLE: ${{ parameters.releaseTitle }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}
   displayName: Check for required parameters in YAML template
-- powershell: |
-    if ($Env:TAG -match '-') {
-      Write-Host "GitHub release is pre-release because of $Env:TAG"
-      Write-Host "##vso[task.setvariable variable=isPreRelease]true"
-      Write-Host "##vso[task.setvariable variable=compareWith]lastRelease"
-      Write-Host "##vso[task.setvariable variable=releaseNotes]$Env:RELEASE_NOTES"
-      Write-Host "##vso[task.setvariable variable=isDraft]false"
-    } else {
-      Write-Host "GitHub release is full-release because of $Env:TAG"
-      Write-Host "##vso[task.setvariable variable=isPreRelease]false"
-      Write-Host "##vso[task.setvariable variable=compareWith]lastFullRelease"
+- bash: |
+    if [[ "$TAG" == *"-"* ]]; then
+      echo "GitHub release is pre-release because of $TAG"
+      echo "##vso[task.setvariable variable=isPreRelease]true"
+      echo "##vso[task.setvariable variable=compareWith]lastRelease"
+      echo "##vso[task.setvariable variable=releaseNotes]$RELEASE_NOTES"
+      echo "##vso[task.setvariable variable=isDraft]false"
+    else
+      echo "GitHub release is full-release because of $TAG"
+      echo "##vso[task.setvariable variable=isPreRelease]false"
+      echo "##vso[task.setvariable variable=compareWith]lastFullRelease"
 
-      $releaseSummary = 
-    @"
-    
+      releaseSummary = "
     ## What's new?
     ### Features
 
@@ -54,12 +52,11 @@ steps:
 
     ### Removal
     None.
-    "@
-     
-      $releaseNotes = $Env:RELEASE_NOTES + $releaseSummary
-      Write-Host "##vso[task.setvariable variable=releaseNotes]$releaseNotes"
-      Write-Host "##vso[task.setvariable variable=isDraft]true"
-    }
+    "
+    releaseNotes = "$RELEASE_NOTES$releaseSummary"
+    echo "##vso[task.setvariable variable=releaseNotes]$releaseNotes"
+    echo "##vso[task.setvariable variable=isDraft]true"
+    fi
   env:
     TAG: ${{ parameters.tag }}
     RELEASE_NOTES: ${{ parameters.releaseNotes }}

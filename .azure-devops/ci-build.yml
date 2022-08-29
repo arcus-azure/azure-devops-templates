@@ -133,4 +133,4 @@ stages:
               releaseTitle: '$(GitHub.Release)'
               releaseNotes: |
                 Nevermind this release notes.
-                ```
+                This is a multi-line release notes example.
