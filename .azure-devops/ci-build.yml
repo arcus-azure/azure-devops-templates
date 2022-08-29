@@ -132,4 +132,5 @@ stages:
               tag: '$(GitHub.Release)'
               releaseTitle: '$(GitHub.Release)'
               releaseNotes: |
-                Nevermind this release notes.\nThis is a multi-line release notes example.
+                Nevermind this release notes.
+                This is a multi-line release notes example.
