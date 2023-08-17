@@ -1,5 +1,6 @@
 parameters:
   dotnetSdkVersion: ''
+  includePreviewVersions: false
   projectName: 'src/*.sln'
 
 steps:
@@ -21,6 +22,7 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '${{ parameters.dotnetSdkVersion }}'
+    includePreviewVersions: ${{ parameters.includePreviewVersions }}
 - task: DotNetCoreCLI@2
   displayName: 'Run unit tests'
   inputs:
