@@ -1,5 +1,6 @@
 parameters:
   dotnetSdkVersion: ''
+  includePreviewVersions: false
   projectName: 'src/*.sln'
   category: ''
 
@@ -31,6 +32,7 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '${{ parameters.dotnetSdkVersion }}'
+    includePreviewVersions: ${{ parameters.includePreviewVersions }}
 - task: qetza.replacetokens.replacetokens-task.replacetokens@3
   displayName: 'Replace integration test tokens'
   inputs:
