@@ -1,6 +1,7 @@
 parameters:
   dotnetSdkVersion: ''
   versionSuffix: ''
+  includePreviewVersions: false
   version: ''
   projects: 'src/*.sln'
 
@@ -44,6 +45,7 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '${{ parameters.dotnetSdkVersion }}'
+    includePreviewVersions: ${{ parameters.includePreviewVersions }}
 - task: DotNetCoreCLI@2
   displayName: 'Compile'
   inputs:
